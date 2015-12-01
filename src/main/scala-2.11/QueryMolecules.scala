@@ -5,6 +5,21 @@ import org.apache.spark.{SparkConf, SparkContext}
  */
 object QueryMolecules {
 
+  def tanimoto(query: Array[Byte], database: Array[Byte]): Float = {
+
+    var z = 0
+    var z2 = 0
+
+    query.zip(database).foreach((x: (Byte, Byte)) => {
+      z += numberOfBitsSet((x._1 & x._2).toByte)
+      z2 += numberOfBitsSet((x._1 | x._2).toByte)
+    })
+
+    (z: Float) / z2
+  }
+
+  def numberOfBitsSet(b: Byte) : Int = (0 to 7).map((i : Int) => (b >>> i) & 1).sum
+
   def main(args: Array[String]) {
 
     if (args.length < 2) {
@@ -54,19 +69,6 @@ object QueryMolecules {
 
 
 
-  def tanimoto(query: Array[Byte], database: Array[Byte]): Float = {
 
-    var z = 0
-    var z2 = 0
-
-    query.zip(database).foreach((x: (Byte, Byte)) => {
-      z += numberOfBitsSet((x._1 & x._2).toByte)
-      z2 += numberOfBitsSet((x._1 | x._2).toByte)
-    })
-
-    (z: Float) / z2
-  }
-
-  def numberOfBitsSet(b: Byte) : Int = (0 to 7).map((i : Int) => (b >>> i) & 1).sum
 
 }
