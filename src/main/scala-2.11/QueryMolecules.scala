@@ -1,5 +1,6 @@
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
+import HexBytesUtil._
 
 /**
  * Created by christophebovigny on 01.12.15.
