@@ -7,8 +7,9 @@ object QueryMolecules {
 
   def tanimoto(query: Array[Byte], database: Array[Byte]): Float = {
 
-    var z = 0
-    var z2 = 0
+    var z = 0;
+    var z2 = 0;
+
 
     query.zip(database).foreach((x: (Byte, Byte)) => {
       z += numberOfBitsSet((x._1 & x._2).toByte)
@@ -42,7 +43,10 @@ object QueryMolecules {
       val v = line.split("\\s+");
       (v(0).trim, HexBytesUtil.hex2bytes(v(1).trim))
 
-    }).map(b => {
+    })
+
+
+     val tani =  smileAndFingerPrint.map(b => {
         val t = (tanimoto(b._2, userInput), b); //println(t);
        t
       })
@@ -60,7 +64,7 @@ object QueryMolecules {
         })
       }).filter(_ != null)
 
-    val topN = smileAndFingerPrint.take(100)
+    val topN = tani.take(100)
 
     topN.foreach(b => println("(" + b._1 + "," + b._2._1 + ")"))
 
