@@ -1,3 +1,4 @@
+import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**
@@ -39,14 +40,13 @@ object QueryMolecules {
 
     val sc = new SparkContext(conf)
 
+
+
     val smileAndFingerPrint = sc.textFile(file1).map(line => {
       val v = line.split("\\s+");
       (v(0).trim, HexBytesUtil.hex2bytes(v(1).trim))
 
-    })
-
-
-     val tani =  smileAndFingerPrint.map(b => {
+    }).map(b => {
         val t = (tanimoto(b._2, userInput), b); //println(t);
        t
       })
@@ -64,7 +64,7 @@ object QueryMolecules {
         })
       }).filter(_ != null)
 
-    val topN = tani.take(100)
+    val topN = smileAndFingerPrint.take(100)
 
     topN.foreach(b => println("(" + b._1 + "," + b._2._1 + ")"))
 
